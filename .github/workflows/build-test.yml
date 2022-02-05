@@ -69,7 +69,9 @@ jobs:
 
     runs-on: ${{ matrix.runner }}
     steps:
-      - uses: actions/checkout@v2
+      - uses:
+        - actions/checkout@v2
+        - actions/cache@v2
 
       #
       # Setup and Configuration
@@ -142,6 +144,10 @@ jobs:
         with:
           working-directory: ${{ github.workspace }}/build
           run: ctest --output-on-failure -C ${{ matrix.flavor }}
+      - name: Windows - Test
+        if: ${{ startsWith(matrix.runner, 'windows') }}
+        working-directory: ${{ github.workspace }}/build
+        run: ctest --output-on-failure -C ${{ matrix.flavor }}
 
       #
       # Deploy Release Binaries
