@@ -70,8 +70,6 @@ jobs:
     runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v2
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
 
       #
       # Setup and Configuration
@@ -148,6 +146,9 @@ jobs:
         if: ${{ startsWith(matrix.runner, 'windows') }}
         working-directory: ${{ github.workspace }}/build
         run: ctest --output-on-failure -C ${{ matrix.flavor }}
+      - name: Setup tmate session
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3
 
       #
       # Deploy Release Binaries
